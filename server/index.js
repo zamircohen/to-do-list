@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 const { User } = require("./models/user")
+const cors = require("cors")
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -9,6 +10,8 @@ const JWT_SECRET = "0823uoiwehfFusTKLciadfsbaasd2346sdfbjaenrw"
 
 // MIDDLEWARES
 app.use(express.json())
+
+app.use(cors())
 
 app.use((req, res, next) => {
   const authHeader = req.header("Authorization")
@@ -29,6 +32,12 @@ const requireLogin = (req, res, next) => {
 }
 
 
+const router = express.Router()
+
+router.get("/api")
+router.get("/secret")
+
+app.use("/auth", requireLogin, router)
 
 
 

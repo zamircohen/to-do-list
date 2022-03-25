@@ -1,11 +1,12 @@
 import React, {useState} from 'react'
+import { useNavigate } from 'react-router-dom'
 
 
 export default function SignupPage() {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-
+    const navigate = useNavigate()
 
     function handleOnSubmit(e){
         e.preventDefault()
@@ -14,7 +15,7 @@ export default function SignupPage() {
             username,
             password,
         }
-        const url = "https://lab.willandskill.eu/api/v1/auth/users/"
+        const url = "http://localhost:3001/users"
         fetch(url, {
             method: "POST",
             headers: {
@@ -24,13 +25,13 @@ export default function SignupPage() {
         })
         .then(res => res.json())
         .then(data => console.log(data))
+        navigate("/")    
     }
 
 
-   
   return (
     <div>
-        
+        <h1>Create account</h1>
         <form onSubmit={handleOnSubmit}>
                 Username: <input 
                     type="text"
@@ -39,14 +40,15 @@ export default function SignupPage() {
                     onChange={e => setUsername(e.target.value)}
                 /> <br />
                 Password: <input 
-                    type="text" 
+                    type="password" 
                     placeholder="Password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                 /> <br />
-                <button type="submit">Login</button>
+                <button type="submit">Sign up</button>
            </form>
-
+           <br />
+           <a href="/">Back to login</a>
     </div>
   )
 }

@@ -1,10 +1,10 @@
-import React, {useState} from "react";
-// import logo from "./logo.svg";
+import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import MyPage from "./pages/MyPage";
 
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
     <Routes>
        <Route path="/" element={<LoginPage />} />
        <Route path="/signup" element={<SignupPage />} />
+       <Route path="/mypage" element={<MyPage />} />
     </Routes>
     </div>
 
