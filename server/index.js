@@ -29,7 +29,7 @@ app.post("/users", async (req, res) => {
 
 
 //CONNECTIONS
-mongoose.connect("mongodb://127.0.0.1/backend1/to_do_list");
+mongoose.connect("mongodb://127.0.0.1/backend2");
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
