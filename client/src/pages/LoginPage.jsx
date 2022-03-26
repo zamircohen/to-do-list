@@ -9,7 +9,6 @@ export default function StartPage() {
 
 
     function handleOnSubmit(e) {
-        console.log("HandleOnSubmit function is working")
         e.preventDefault()
         const url = "http://localhost:3001/login"
         const payload = { username, password }

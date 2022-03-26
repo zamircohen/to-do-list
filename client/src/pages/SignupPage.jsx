@@ -15,7 +15,7 @@ export default function SignupPage() {
             username,
             password,
         }
-        const url = "http://localhost:3001/users"
+        const url = "http://localhost:3001/create"
         fetch(url, {
             method: "POST",
             headers: {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 
@@ -8,9 +8,9 @@ import MyPage from "./pages/MyPage";
 
 
 function App() {
-  const [data, setData] = React.useState(null);
+  const [data, setData] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetch("/api")
       .then((res) => res.json())
       .then((data) => setData(data.message));

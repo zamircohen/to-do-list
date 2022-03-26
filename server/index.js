@@ -54,6 +54,19 @@ app.get("/secret", requireLogin, (req, res) => {
 })
 
 
+// app.get("/users", requireLogin, async (req, res) => {
+//   const user = req.user
+//   await User.findOne({ username : req.user.username })
+//   res.json({ user })
+// })
+
+
+app.get("/users", requireLogin, (req, res) => {
+  res.json({ username : `This has to work with a user from database instead` })
+})
+
+
+
 
 // LOGIN 
 app.post("/login", async (req, res) => {
@@ -75,7 +88,7 @@ app.post("/login", async (req, res) => {
 
 
 
-app.post("/logged", requireLogin, async (req, res) => {
+app.post("/users", requireLogin, async (req, res) => {
   const user = req.user
   await User.findOne({ user : user.username })
   res.json({ user })
@@ -84,7 +97,7 @@ app.post("/logged", requireLogin, async (req, res) => {
 
 
 // CREATE USER
-app.post("/users", async (req, res) => {
+app.post("/create", async (req, res) => {
   const {username, password} = req.body
   const user = new User({username, password})
   await user.save()
