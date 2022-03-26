@@ -11,7 +11,7 @@ export default function StartPage() {
     function handleOnSubmit(e) {
         console.log("HandleOnSubmit function is working")
         e.preventDefault()
-        const url = "http://localhost:3000/"
+        const url = "http://localhost:3001/login"
         const payload = { username, password }
         fetch(url, {
             method: "POST",
@@ -23,8 +23,8 @@ export default function StartPage() {
         .then(res => res.json())
         .then(data => {
             const token = data.token
-            localStorage.setItem("todo_app", token)
-            console.log(`${token}`)
+            localStorage.setItem("todoapp", token)
+            console.log(token)
         })
         navigate("/mypage")
     }

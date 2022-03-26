@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken")
 const { User } = require("./models/user")
 const cors = require("cors")
 
-const PORT = process.env.PORT || 3001;
+// const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 const app = express();
 const JWT_SECRET = "0823uoiwehfFusTKLciadfsbaasd2346sdfbjaenrw"
 
@@ -32,12 +33,12 @@ const requireLogin = (req, res, next) => {
 }
 
 
-const router = express.Router()
+// const router = express.Router()
 
-router.get("/api")
-router.get("/secret")
+// router.get("/api")
+// router.get("/secret")
 
-app.use("/auth", requireLogin, router)
+// app.use("/auth", requireLogin, router)
 
 
 
@@ -70,6 +71,14 @@ app.post("/login", async (req, res) => {
     } else {
       res.sendStatus(401)
     }
+})
+
+
+
+app.post("/logged", requireLogin, async (req, res) => {
+  const user = req.user
+  await User.findOne({ user : user.username })
+  res.json({ user })
 })
 
 

@@ -3,31 +3,34 @@ import React, {useState, useEffect} from 'react'
 
 export default function MyPage() {
 
-    const [myData, setMyData] = useState(null)
+    const [myData, setMyData] = useState("")
 
     useEffect(() => {
-        const url = "http://localhost:3001/mypage"
-        const token = localStorage.getItem("todo_app")
+        const url = "http://localhost:3001/logged"
+        const token = localStorage.getItem("todoapp")
         fetch(url, {
             headers: {
+                "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             }
         })
         .then(res => res.json())
         .then(data => setMyData(data))
+        console.log(`Your token: ${token}`)
+        // console.log(`Your data: ${myData}`)
     }, [])
 
 
   return (
     <div>
-        My Page
-
-        {
-            myData && (
-            <>
-                <h2>Welcome {myData.username}</h2>
-            </>
-        )}
+        
+        <h1>My Page</h1>
+            {myData && (
+                <>
+                    <h2>Hello</h2>
+                    <h2>{myData.username}</h2>
+                </>
+            )}
 
     </div>
   )
