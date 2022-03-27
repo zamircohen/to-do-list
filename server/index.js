@@ -3,19 +3,20 @@ const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 const { User } = require("./models/user")
 const { Todo } = require("./models/todo")
+const bodyParser = require("body-parser")
 const cors = require("cors")
 
 // const PORT = process.env.PORT || 3001;
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const app = express();
 const JWT_SECRET = "0823uoiwehfFusTKLciadfsbaasd2346sdfbjaenrw"
 
 // MIDDLEWARES
 app.use(express.json())
-
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
 
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   const authHeader = req.header("Authorization")
   if (authHeader) {
     const token = authHeader.split(" ")[1]
@@ -55,14 +56,14 @@ app.get("/api", (req, res) => {
 // })
 
 
-app.get("/users", requireLogin, async (req, res) => {
+app.get("/users", requireLogin, (req, res) => {
   const user = req.user
-  await User.findOne({ user : user })
+  User.findOne({ user : user })
   res.json({ user })
 })
 
 
-// app.get("/users", requireLogin, (req, res) => {
+// app.get("/users", requireLogin, (_req, res) => {
 //   res.json({ username : `This has to work with a user from database instead` })
 // })
 
@@ -108,10 +109,20 @@ app.post("/create", async (req, res) => {
 
 
 // CREATE POST
+// app.post("/todo", async (req, res) => {
+//   const { item, user, date, done } = req.body
+//   const todo = new Todo({item, user, date, done})
+//   await todo.save()
+// })
+
 app.post("/todo", async (req, res) => {
-  const { item, user, date, done } = req.body
-  const todo = new Todo({item, user, date, done})
-  await todo.save()
+  const { todo } = req.body
+  const user = req.user
+  const newEntry = new Todo({ todo })
+  await newEntry.save()
+  console.log(`This is the user ${user}`)
+  res.json({user})
+  // console.log(`This is from the server: ${todo}`)
 })
 
 
