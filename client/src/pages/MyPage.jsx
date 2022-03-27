@@ -15,10 +15,11 @@ export default function MyPage() {
         const url = "/users"
         const token = localStorage.getItem("todoapp")
         const headers = {
-                // "Content-Type": "application/json",
+                "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
                 }
         fetch(url, {
+            method: "GET",
             headers : headers
         })
         .then(res => res.json())
@@ -55,7 +56,7 @@ export default function MyPage() {
         })
         .then(res => res.json())
         .then(data => console.log(data))
-        navigate("/")    
+        navigate("/mypage")    
     }
 
 
@@ -87,6 +88,7 @@ export default function MyPage() {
                 <button type="submit">To do</button>
            </form>
            <br />
+           
            <a href="/">Logout</a>
 
 

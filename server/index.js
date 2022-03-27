@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 const { User } = require("./models/user")
+const { Todo } = require("./models/todo")
 const cors = require("cors")
 
 // const PORT = process.env.PORT || 3001;
@@ -49,21 +50,21 @@ app.get("/api", (req, res) => {
   
 
 // TEST - SECRET PAGE THAT SHOWS ONLY IF A USER IS LOGGED IN
-app.get("/secret", requireLogin, (req, res) => {
-    res.json({message: `Hello again ${req.user.username}`})
-})
-
-
-// app.get("/users", requireLogin, async (req, res) => {
-//   const user = req.user
-//   await User.findOne({ username : req.user.username })
-//   res.json({ user })
+// app.get("/secret", requireLogin, (req, res) => {
+//     res.json({message: `Hello again ${req.user.username}`})
 // })
 
 
-app.get("/users", requireLogin, (req, res) => {
-  res.json({ username : `This has to work with a user from database instead` })
+app.get("/users", requireLogin, async (req, res) => {
+  const user = req.user
+  await User.findOne({ user : user })
+  res.json({ user })
 })
+
+
+// app.get("/users", requireLogin, (req, res) => {
+//   res.json({ username : `This has to work with a user from database instead` })
+// })
 
 
 
@@ -102,6 +103,15 @@ app.post("/create", async (req, res) => {
   const user = new User({username, password})
   await user.save()
   res.json({username})
+})
+
+
+
+// CREATE POST
+app.post("/todo", async (req, res) => {
+  const { item, user, date, done } = req.body
+  const todo = new Todo({item, user, date, done})
+  await todo.save()
 })
 
 
