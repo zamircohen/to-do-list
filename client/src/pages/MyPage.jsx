@@ -6,7 +6,7 @@ export default function MyPage() {
 
     const [myData, setMyData] = useState("")
     const [todo, setTodo] = useState("")
-    const [todoList, setTodoList] = useState("")
+    const [todoList, setTodoList] = useState(null)
 
     const navigate = useNavigate()
 
@@ -49,27 +49,47 @@ export default function MyPage() {
 
     useEffect(() => {
         fetchData()
-        fetchList()
+        // fetchList()
       }, []);
     
+
+      function apifetch(method, path, body) {
+        const url = `http://localhost:3001${path}`
+        const token = localStorage.getItem('todoapp')
+        if (body) {
+            body = JSON.stringify(body)
+        }
+        return fetch(url, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body
+        })
+      }
+
 
 
       // FUNCTION FOR CREATING A NEW POST
       function handleOnSubmit(e){
         e.preventDefault()
         const payload = {todo}
-        const url = "http://localhost:3001/todo"
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        })
+        // const url = "http://localhost:3001/todo"
+        // const token = localStorage.getItem('todoapp')
+        // fetch(url, {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         Authorization: `Bearer ${token}`
+        //     },
+        //     body: JSON.stringify(payload)
+        // })
+        apifetch("POST", "/todo", payload)
         .then(res => res.json())
         .then(data => console.log(data))
         navigate("/mypage")    
-        fetchData()
+        // fetchData()
         fetchList()
         // console.log(`This is from the client: ${todo}`)
     }
@@ -77,23 +97,22 @@ export default function MyPage() {
 
 
     function fetchList() {
-        const url = "http://localhost:3001/mytodos"
-        const token = localStorage.getItem("todoapp")
+        console.log("Goes into fetchlist")
+        const url = 'http://localhost:3001/mytodos'
+        const token = localStorage.getItem('todoapp')
         const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        };
         fetch(url, {
             headers: headers,
         })
-        .then(res => res.json())
-        .then(data => setTodoList(data))
-    }
-
+            .then((res) => res.json())
+            .then((data) => {
+                setTodoList(data.newEntry)
+            });
+    };
     
-
-
-
 
     // LOG OUT FUNCTION
     function handleOnClick() {
@@ -101,17 +120,29 @@ export default function MyPage() {
         navigate("/")
     };
 
+
     
   return (
     <div>
-        
         <h1>My Page</h1>
-        
             {myData && (
                 <>
                     <h2>Hello {myData.user.username}! This is your to do list.</h2>
                 </>
             )}
+
+                {todoList && todoList.map((items) => {
+                    return (
+                        <>
+                        <ul>
+                            <li>{items.todo}</li>
+                            {/* <li>{items.date}</li> */}
+                        </ul>
+                        </>
+                    )
+                })
+                }
+
 
         <form onSubmit={handleOnSubmit}>
                 To do: <input 
@@ -124,22 +155,11 @@ export default function MyPage() {
            </form>
            <br />
            <button onClick={handleOnClick}>Log out</button>
-{/* 
-
-                {todoList && todoList.map((items) => {
-                    return (
-                        <>
-                        <ul>
-                            <li>{items.todo}</li>
-                            <li>{items.date}</li>
-                        </ul>
-                        </>
-                    )
-                })
-                }
 
 
- */}
+              
+
+
     </div>
   )
 }

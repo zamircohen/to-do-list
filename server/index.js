@@ -6,6 +6,7 @@ const { Todo } = require("./models/todo")
 const bodyParser = require("body-parser")
 const cors = require("cors")
 
+
 // const PORT = process.env.PORT || 3001;
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -15,6 +16,7 @@ const JWT_SECRET = "0823uoiwehfFusTKLciadfsbaasd2346sdfbjaenrw"
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
+
 
 app.use((req, _res, next) => {
   const authHeader = req.header("Authorization")
@@ -44,18 +46,13 @@ const requireLogin = (req, res, next) => {
 
 
 
-app.get("/api", (req, res) => {
+app.get("/api", requireLogin, (req, res) => {
     res.json({ message: "Your TO-DO list" });
   });
 
   
 
-// TEST - SECRET PAGE THAT SHOWS ONLY IF A USER IS LOGGED IN
-// app.get("/secret", requireLogin, (req, res) => {
-//     res.json({message: `Hello again ${req.user.username}`})
-// })
-
-
+// GET USER INFORMATION TO SHOW IN FRONTEND
 app.get("/users", requireLogin, (req, res) => {
   const user = req.user
   User.findOne({ user : user })
@@ -63,9 +60,28 @@ app.get("/users", requireLogin, (req, res) => {
 })
 
 
-// app.get("/users", requireLogin, (_req, res) => {
-//   res.json({ username : `This has to work with a user from database instead` })
-// })
+
+
+// GET LIST OF TO DO POSTS
+app.get("/mytodos", requireLogin, (req, res) => {
+  console.log("Program jumps into server mytodos function")
+  const newEntry = Todo.findOne()
+  res.json({ newEntry });
+  // console.log(entries)
+});
+
+// GET LIST OF TO DO POSTS
+// app.get("/mytodos", requireLogin, (req, res) => {
+//   console.log("Program jumps into server mytodos function")
+//   const entries = Todo
+//       .find({ user_ref: req.user._id })
+//       .populate("user")
+//       .exec();
+//   res.json({ entries });
+//   console.log(entries)
+// });
+
+
 
 
 
@@ -115,16 +131,16 @@ app.post("/create", async (req, res) => {
 //   await todo.save()
 // })
 
-app.post("/todo", async (req, res) => {
+
+app.post("/todo", requireLogin, async (req, res) => {
   const { todo } = req.body
   const user = req.user
-  const newEntry = new Todo({ todo })
+  const newEntry = new Todo({ todo, user: user.userId })
   await newEntry.save()
-  console.log(`This is the user ${user}`)
-  res.json({user})
+  console.log(`This is the user ${user.userId}`)
+  // res.json({user})
   // console.log(`This is from the server: ${todo}`)
 })
-
 
 
 

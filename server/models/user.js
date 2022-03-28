@@ -12,9 +12,8 @@ userSchema.pre(
         const hash = await bcrypt.hash(this.password, 10)
         this.password = hash
         next()
-    }
-)
-
+    })
+    
 
 userSchema.statics.login = async function(username, password) {
     const user = await this.findOne({username})
