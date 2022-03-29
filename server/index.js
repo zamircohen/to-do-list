@@ -46,9 +46,9 @@ const requireLogin = (req, res, next) => {
 
 
 
-app.get("/api", requireLogin, (req, res) => {
-    res.json({ message: "Your TO-DO list" });
-  });
+// app.get("/api", requireLogin, (req, res) => {
+//     res.json({ message: "Your TO-DO list" });
+//   });
 
   
 
@@ -63,23 +63,26 @@ app.get("/users", requireLogin, (req, res) => {
 
 
 // GET LIST OF TO DO POSTS
-app.get("/mytodos", requireLogin, (req, res) => {
-  console.log("Program jumps into server mytodos function")
-  const newEntry = Todo.findOne()
-  res.json({ newEntry });
-  // console.log(entries)
-});
-
-// GET LIST OF TO DO POSTS
 // app.get("/mytodos", requireLogin, (req, res) => {
 //   console.log("Program jumps into server mytodos function")
-//   const entries = Todo
-//       .find({ user_ref: req.user._id })
-//       .populate("user")
-//       .exec();
-//   res.json({ entries });
-//   console.log(entries)
+//   const newEntry = Todo.findOne()
+//   res.json({ newEntry });
+//   // console.log(entries)
 // });
+
+
+
+// GET LIST OF TO DO POSTS
+app.get("/mytodos", requireLogin, async (req, res) => {
+  console.log("Program jumps into server mytodos function")
+  const user = req.user
+  const entries = await Todo
+      .find({ user: user.userId })
+      .populate("user")
+      .exec();
+  res.json({ entries });
+  console.log(entries)
+});
 
 
 
@@ -125,13 +128,6 @@ app.post("/create", async (req, res) => {
 
 
 // CREATE POST
-// app.post("/todo", async (req, res) => {
-//   const { item, user, date, done } = req.body
-//   const todo = new Todo({item, user, date, done})
-//   await todo.save()
-// })
-
-
 app.post("/todo", requireLogin, async (req, res) => {
   const { todo } = req.body
   const user = req.user

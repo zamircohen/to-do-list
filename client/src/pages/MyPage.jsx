@@ -6,7 +6,7 @@ export default function MyPage() {
 
     const [myData, setMyData] = useState("")
     const [todo, setTodo] = useState("")
-    const [todoList, setTodoList] = useState(null)
+    const [todoList, setTodoList] = useState([])
 
     const navigate = useNavigate()
 
@@ -27,33 +27,8 @@ export default function MyPage() {
     // }, [])
 
 
-
-    // GET USER INFORMATION FROM BACKEND 
-    function fetchData() {
-        const url = 'http://localhost:3001/users'
-        const token = localStorage.getItem('todoapp')
-        const headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        };
-        fetch(url, {
-            headers: headers,
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setMyData(data)
-                console.log(data)
-            });
-    };
-
-
-    useEffect(() => {
-        fetchData()
-        // fetchList()
-      }, []);
     
-
-      function apifetch(method, path, body) {
+    function apifetch(method, path, body) {
         const url = `http://localhost:3001${path}`
         const token = localStorage.getItem('todoapp')
         if (body) {
@@ -68,6 +43,35 @@ export default function MyPage() {
             body
         })
       }
+
+
+
+    // GET USER INFORMATION FROM BACKEND 
+    function fetchData() {
+        const payload = ""
+    //     // const url = 'http://localhost:3001/users'
+    //     // const token = localStorage.getItem('todoapp')
+    //     // const headers = {
+    //     //     "Content-Type": "application/json",
+    //     //     Authorization: `Bearer ${token}`,
+    //     // };
+    //     // fetch(url, {
+    //     //     headers: headers,
+    //     // })
+        apifetch("GET", "/users", payload)
+            .then((res) => res.json())
+            .then((data) => {
+                setMyData(data)
+                console.log(data)
+            });
+    };
+
+
+    useEffect(() => {
+        fetchData()
+        // fetchList()
+      }, []);
+    
 
 
 
@@ -97,7 +101,6 @@ export default function MyPage() {
 
 
     function fetchList() {
-        console.log("Goes into fetchlist")
         const url = 'http://localhost:3001/mytodos'
         const token = localStorage.getItem('todoapp')
         const headers = {
@@ -109,7 +112,7 @@ export default function MyPage() {
         })
             .then((res) => res.json())
             .then((data) => {
-                setTodoList(data.newEntry)
+                setTodoList(data.entries)
             });
     };
     

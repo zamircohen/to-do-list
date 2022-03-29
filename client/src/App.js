@@ -10,16 +10,16 @@ import MyPage from "./pages/MyPage";
 function App() {
   const [data, setData] = useState(null);
 
-  useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
+  // useEffect(() => {
+  //   fetch("/api")
+  //     .then((res) => res.json())
+  //     .then((data) => setData(data.message));
+  // }, []);
 
   return (
     <div>
   
-    <p>{!data ? "Loading..." : data}</p>
+    {/* <p>{!data ? "Loading..." : data}</p> */}
 
     <Routes>
        <Route path="/" element={<LoginPage />} />
