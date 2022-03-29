@@ -138,7 +138,7 @@ export default function MyPage() {
                     return (
                         <>
                         <ul>
-                            <li>{items.todo}</li>
+                            <li>{items.todo}, {items.date}</li>
                             {/* <li>{items.date}</li> */}
                         </ul>
                         </>

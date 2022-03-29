@@ -75,13 +75,15 @@ app.get("/users", requireLogin, (req, res) => {
 // GET LIST OF TO DO POSTS
 app.get("/mytodos", requireLogin, async (req, res) => {
   console.log("Program jumps into server mytodos function")
+  const mysort = { date: -1 }
   const user = req.user
   const entries = await Todo
       .find({ user: user.userId })
+      .sort(mysort)
       .populate("user")
       .exec();
   res.json({ entries });
-  console.log(entries)
+  // console.log(entries)
 });
 
 
