@@ -157,13 +157,20 @@ app.post("/todo", requireLogin, async (req, res) => {
 
 
 app.post("/checkbox", requireLogin, async (req, res) => {
-  const { todo } = req.body
-  
-  if (todo.isDone === false) {
-    todo.isDone = true
+  console.log("Done has been clicked in server")
+  const { todo_id } = req.body
+  const user = req.user
+
+  console.log(todo_id)
+  // console.log(check)
+  console.log(user)
+    
+  if (todo_id.isDone === false) {
+    await Todo.updateOne({_id: todo_id, user: user.userId}, {isDone: true})
   } else 
-    todo.isDone = false
+    await Todo.updateOne({_id: todo_id, user: user.userId}, {isDone: false})
 })
+
 
 
 

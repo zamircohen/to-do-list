@@ -6,9 +6,8 @@ export default function MyPage() {
 
     const [myData, setMyData] = useState("")
     const [todo, setTodo] = useState("")
-    const [isDone, setIsDone] = useState("")
+    // const [isDone, setIsDone] = useState(false)
     const [todoList, setTodoList] = useState([])
-    const [doneList, setDoneList] = useState([])
 
     const navigate = useNavigate()
 
@@ -71,7 +70,7 @@ export default function MyPage() {
 
     useEffect(() => {
         fetchData()
-        // fetchList()
+        fetchList()
       }, []);
     
 
@@ -119,31 +118,19 @@ export default function MyPage() {
     };
 
 
-    function checkboxChange() {
-        const payload = {todo}
+
+    function handleOnDoneClick(todo_id) {
+        // e.preventDefault()
+        console.log("Done has been clicked in client")
+        const payload = {todo_id}
         apifetch("POST", "/checkbox", payload)
         .then(res => res.json())
-        .then(data => console.log(data))
+        .then(data => console.log())
         // fetchData()
         fetchList()
     }
 
-
-    // function fetchDoneList() {
-    //     const url = 'http://localhost:3001/mydones'
-    //     const token = localStorage.getItem('todoapp')
-    //     const headers = {
-    //         "Content-Type": "application/json",
-    //         Authorization: `Bearer ${token}`,
-    //     };
-    //     fetch(url, {gfg
-    //         headers: headers,
-    //     })
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             setTodoList(data.entries)
-    //         });
-    // };
+   
     
 
     // LOG OUT FUNCTION
@@ -164,16 +151,18 @@ export default function MyPage() {
             )} */}
 
                 {todoList && todoList.map((items) => {
+                    if (items.isDone === false) {
                     return (
                         <>
                         <ul>
-                            <li>{items.todo} - ({items.date})</li><input type="checkbox" value={isDone} onChange={checkboxChange()} />
+                            <li>{items.todo} - ({items.date})</li>
+                            <button onClick={(e) => handleOnDoneClick(items._id)}>Done</button>
                         </ul>
                         </>
-                    )
+                    )}
                 })
                 }
-
+            
 
         <form onSubmit={handleOnSubmit}>
                 To do: <input 
@@ -190,14 +179,16 @@ export default function MyPage() {
 
            <h1>Done...</h1>
               
-           {doneList && doneList.map((items) => {
+           {todoList && todoList.map((items) => {
+               if (items.isDone === true) {
                     return (
                         <>
                         <ul>
                             <li>{items.todo} - ({items.date})</li>
+                            <button onClick={(e) => handleOnDoneClick(items._id)}>Undone</button>
                         </ul>
                         </>
-                    )
+                    )}
                 })
                 }
 
