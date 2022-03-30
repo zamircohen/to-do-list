@@ -88,6 +88,21 @@ app.get("/mytodos", requireLogin, async (req, res) => {
 
 
 
+app.get("/mydones", requireLogin, async (req, res) => {
+  console.log("Program jumps into server mydones function")
+  const mysort = { date: -1 }
+  const user = req.user
+  const entries = await Todo
+      .find({ user: user.userId })
+      .sort(mysort)
+      .populate("user")
+      .exec();
+  res.json({ entries });
+  // console.log(entries)
+});
+
+
+
 
 
 
@@ -140,6 +155,15 @@ app.post("/todo", requireLogin, async (req, res) => {
   // console.log(`This is from the server: ${todo}`)
 })
 
+
+app.post("/checkbox", requireLogin, async (req, res) => {
+  const { todo } = req.body
+  
+  if (todo.isDone === false) {
+    todo.isDone = true
+  } else 
+    todo.isDone = false
+})
 
 
 

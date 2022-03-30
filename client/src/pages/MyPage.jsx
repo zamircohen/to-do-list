@@ -6,7 +6,9 @@ export default function MyPage() {
 
     const [myData, setMyData] = useState("")
     const [todo, setTodo] = useState("")
+    const [isDone, setIsDone] = useState("")
     const [todoList, setTodoList] = useState([])
+    const [doneList, setDoneList] = useState([])
 
     const navigate = useNavigate()
 
@@ -115,6 +117,33 @@ export default function MyPage() {
                 setTodoList(data.entries)
             });
     };
+
+
+    function checkboxChange() {
+        const payload = {todo}
+        apifetch("POST", "/checkbox", payload)
+        .then(res => res.json())
+        .then(data => console.log(data))
+        // fetchData()
+        fetchList()
+    }
+
+
+    // function fetchDoneList() {
+    //     const url = 'http://localhost:3001/mydones'
+    //     const token = localStorage.getItem('todoapp')
+    //     const headers = {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${token}`,
+    //     };
+    //     fetch(url, {gfg
+    //         headers: headers,
+    //     })
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             setTodoList(data.entries)
+    //         });
+    // };
     
 
     // LOG OUT FUNCTION
@@ -127,19 +156,18 @@ export default function MyPage() {
     
   return (
     <div>
-        <h1>My Page</h1>
-            {myData && (
+        <h1>To do...</h1>
+            {/* {myData && (
                 <>
                     <h2>Hello {myData.user.username}! This is your to do list.</h2>
                 </>
-            )}
+            )} */}
 
                 {todoList && todoList.map((items) => {
                     return (
                         <>
                         <ul>
-                            <li>{items.todo}, {items.date}</li>
-                            {/* <li>{items.date}</li> */}
+                            <li>{items.todo} - ({items.date})</li><input type="checkbox" value={isDone} onChange={checkboxChange()} />
                         </ul>
                         </>
                     )
@@ -160,7 +188,18 @@ export default function MyPage() {
            <button onClick={handleOnClick}>Log out</button>
 
 
+           <h1>Done...</h1>
               
+           {doneList && doneList.map((items) => {
+                    return (
+                        <>
+                        <ul>
+                            <li>{items.todo} - ({items.date})</li>
+                        </ul>
+                        </>
+                    )
+                })
+                }
 
 
     </div>

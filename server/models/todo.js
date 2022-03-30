@@ -5,7 +5,7 @@ const todoSchema = new Schema({
     todo: {type: String},
     user: {type: Schema.Types.ObjectId, ref: "User"},
     date: {type: Date, default: Date.now},
-    // done: {type: Boolean}
+    isDone: {type: Boolean, default: false}
 })
 
 const Todo = mongoose.model("Todo", todoSchema)
