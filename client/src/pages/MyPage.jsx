@@ -121,7 +121,6 @@ export default function MyPage() {
 
     function handleOnDoneClick(todo_id) {
         // e.preventDefault()
-        console.log("Done has been clicked in client")
         const payload = {todo_id}
         apifetch("POST", "/checkbox", payload)
         .then(res => res.json())

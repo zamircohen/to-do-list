@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken")
 const { User } = require("./models/user")
 const { Todo } = require("./models/todo")
 const bodyParser = require("body-parser")
-const cors = require("cors")
+const cors = require("cors");
+const res = require("express/lib/response");
 
 
 // const PORT = process.env.PORT || 3001;
@@ -157,19 +158,32 @@ app.post("/todo", requireLogin, async (req, res) => {
 
 
 app.post("/checkbox", requireLogin, async (req, res) => {
-  console.log("Done has been clicked in server")
   const { todo_id } = req.body
-  const user = req.user
+  // const todoitem = await Todo.find({_id: todo_id})
+  // const filter = { _id: `${todoitem}`}
+  // const user = req.user
 
-  console.log(todo_id)
-  // console.log(check)
-  console.log(user)
+  // console.log(`todo_id is ${todo_id.todo}`)
+  // console.log(`filter is ${filter}`)
+  // console.log(`isDone ${isDone}`)
+  // console.log(`todoitem is ${todoitem}`)
+  // console.log(`isDone is ${todoitem}`)
+  // console.log(`user is ${user}`)
+  // console.log(`user.userId is ${user.userId}`)
+  // console.log(isDone)
+  // console.log(!isDone)
     
-  if (todo_id.isDone === false) {
-    await Todo.updateOne({_id: todo_id, user: user.userId}, {isDone: true})
-  } else 
-    await Todo.updateOne({_id: todo_id, user: user.userId}, {isDone: false})
+  // if (isDone === false) {
+  //   console.log("got to if state")
+    // await Todo.findOneAndUpdate(filter, {user: user.userId, todoitem: todo_id }, {isDone: true})
+    await Todo.updateOne( {_id: todo_id}, [ { "$set": { "isDone": { "$eq": [false, "$isDone"] } } } ] )
+  // } 
+  // else {
+  //   await Todo.updateOne({_id: todo_id, user: user.userId}, {isDone: false})
+  // }
+  res.json( {todo_id} )
 })
+
 
 
 
@@ -180,3 +194,5 @@ mongoose.connect("mongodb://127.0.0.1/backend2");
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
+
+
