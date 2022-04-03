@@ -84,13 +84,7 @@ app.get("/todo/:todoId", requireLogin, async (req, res) => {
   const todoId = req.params.todoId
   const entry = await Todo
         .findOne({ _id: todoId })
-        // .exec()
-
-        console.log(`todoId is ${todoId}`)
-        console.log(`entry is ${entry}`)
-
         res.json({ entry });
-
 });
 
 
@@ -150,6 +144,29 @@ app.post("/checkbox", requireLogin, async (req, res) => {
   await Todo.updateOne( {_id: todo_id}, [ { "$set": { "isDone": { "$eq": [false, "$isDone"] } } } ] )
   res.json( {todo_id} )
 })
+
+
+
+
+app.post("/todo/:todoId", requireLogin, async (req, res) => {
+  const todoId = req.params.todoId
+  const filter = {"_id": todoId}
+  const { todo, description, file } = req.body;
+
+  console.log(todo, description, file) 
+
+  Todo.findOneAndUpdate(filter, {$set: {todo : todo, description: description, file: file}}, {new: true}, (err, doc) => {
+      if (err) {
+          console.log("Something wrong when updating data!");
+      }
+      res.redirect("/mytodos")
+  })
+})
+
+
+
+
+
 
 
 

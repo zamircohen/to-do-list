@@ -6,6 +6,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 export default function TodoPage() {
 
     const [todoData, setTodoData] = useState("")
+    const [todo, setTodo] = useState("")
+    const [description, setDescription] = useState("")
+    const [file, setFile] = useState("")
+    
     const navigate = useNavigate()
 
     let { id }  = useParams()
@@ -36,8 +40,8 @@ export default function TodoPage() {
 
     function handleOnSubmit(e){
         e.preventDefault()
-        const payload = {todoData}
-        const url = "http://localhost:3001/todo"
+        const payload = {todo, description, file}
+        const url = `http://localhost:3001/todo/${id}`
         const token = localStorage.getItem('todoapp')
         fetch(url, {
             method: "POST",
@@ -68,17 +72,22 @@ export default function TodoPage() {
 
 
         <form onSubmit={handleOnSubmit}>
-                Edit title <br /><input 
+                Title <br /><input 
                     type="text"
                     placeholder={todoData.todo}
-                    value={todoData.todo}
-                    onChange={e => setTodoData(e.target.value)}
+                    name={todoData.todo}
+                    onChange={e => setTodo(e.target.value)}
                 />
                 <br />
                 <br />
                 Description
                 <br />
-                <textarea>
+                <textarea
+                    type="text"
+                    placeholder={todoData.description}
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                >
                 Enter text here...
                 </textarea> 
                 <br />
@@ -86,9 +95,10 @@ export default function TodoPage() {
                 Upload a file
                 <br />
                 <input 
-                type="file"
-                id="myFile" 
-                name="myFile"/>
+                type="file" 
+                name={file}
+                onChange={e => setFile(e.target.value)}
+                />
                 <br />
                 <br />
                 <button type="submit">Submit</button>
