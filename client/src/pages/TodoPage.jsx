@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 
 
@@ -8,6 +8,7 @@ export default function TodoPage() {
     const [todoData, setTodoData] = useState("")
     const navigate = useNavigate()
 
+    let { id }  = useParams()
 
     useEffect(() => {
         fetchTodo()
@@ -17,7 +18,7 @@ export default function TodoPage() {
 
     // GET TODO INFORMATION FROM BACKEND 
     function fetchTodo() {
-        const url = 'http://localhost:3001/todo/:todoId'
+        const url = `http://localhost:3001/todo/${id}`
         const token = localStorage.getItem('todoapp')
         const headers = {
             "Content-Type": "application/json",
@@ -27,7 +28,7 @@ export default function TodoPage() {
             headers: headers,
           })
             .then((res) => res.json())
-            .then((data) => setTodoData(data));
+            .then((data) => setTodoData(data.entry));
          };
 
 
@@ -56,17 +57,21 @@ export default function TodoPage() {
     return (  
     <div>
 
+        
+
         {todoData && (
             <>
-        <h1>Hello {todoData.todo} </h1>
+        <h1>Bucket List item:</h1> 
+        <h2>{todoData.todo}</h2>
             </>
         )} 
 
+
         <form onSubmit={handleOnSubmit}>
-                To do <br /><input 
+                Edit title <br /><input 
                     type="text"
                     placeholder={todoData.todo}
-                    value={todoData}
+                    value={todoData.todo}
                     onChange={e => setTodoData(e.target.value)}
                 />
                 <br />

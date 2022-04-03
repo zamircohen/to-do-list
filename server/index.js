@@ -82,8 +82,15 @@ app.get("/mytodos", requireLogin, async (req, res) => {
 // GET SPECIFIC TO DO ITEM
 app.get("/todo/:todoId", requireLogin, async (req, res) => {
   const todoId = req.params.todoId
-  Todo.findOne({ _id: todoId })
-  res.json({ todoId });
+  const entry = await Todo
+        .findOne({ _id: todoId })
+        // .exec()
+
+        console.log(`todoId is ${todoId}`)
+        console.log(`entry is ${entry}`)
+
+        res.json({ entry });
+
 });
 
 
