@@ -6,29 +6,19 @@ export default function MyPage() {
 
     const [myData, setMyData] = useState("")
     const [todo, setTodo] = useState("")
-    // const [isDone, setIsDone] = useState(false)
     const [todoList, setTodoList] = useState([])
 
     const navigate = useNavigate()
 
-    // GET INFORMATION ABOUT THE USER WHO IS LOGGED IN
-    // useEffect(() => {
-    //     const url = "/users"
-    //     const token = localStorage.getItem("todoapp")
-    //     const headers = {
-    //             "Content-Type": "application/json",
-    //             "Authorization": `Bearer ${token}`
-    //             }
-    //     fetch(url, {
-    //         method: "GET",
-    //         headers : headers
-    //     })
-    //     .then(res => res.json())
-    //     .then(data => setMyData(data))
-    // }, [])
-
-
     
+            
+    useEffect(() => {
+        fetchData()
+        fetchList()
+      }, []);
+
+
+
     function apifetch(method, path, body) {
         const url = `http://localhost:3001${path}`
         const token = localStorage.getItem('todoapp')
@@ -49,29 +39,21 @@ export default function MyPage() {
 
     // GET USER INFORMATION FROM BACKEND 
     function fetchData() {
-        const payload = ""
-    //     // const url = 'http://localhost:3001/users'
-    //     // const token = localStorage.getItem('todoapp')
-    //     // const headers = {
-    //     //     "Content-Type": "application/json",
-    //     //     Authorization: `Bearer ${token}`,
-    //     // };
-    //     // fetch(url, {
-    //     //     headers: headers,
-    //     // })
-        apifetch("GET", "/users", payload)
+        const url = 'http://localhost:3001/users'
+        const token = localStorage.getItem('todoapp')
+        const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            };
+        fetch(url, {
+            headers: headers,
+          })
             .then((res) => res.json())
-            .then((data) => {
-                setMyData(data)
-                console.log(data)
-            });
-    };
+            .then((data) => setMyData(data));
+         };
 
 
-    useEffect(() => {
-        fetchData()
-        fetchList()
-      }, []);
+ 
     
 
 
@@ -94,9 +76,7 @@ export default function MyPage() {
         .then(res => res.json())
         .then(data => console.log(data))
         navigate("/mypage")    
-        // fetchData()
         fetchList()
-        // console.log(`This is from the client: ${todo}`)
     }
 
 
@@ -120,18 +100,15 @@ export default function MyPage() {
 
 
     function handleOnDoneClick(todo_id) {
-        // e.preventDefault()
         const payload = {todo_id}
         apifetch("POST", "/checkbox", payload)
         .then(res => res.json())
         .then(data => console.log())
-        // fetchData()
         fetchList()
     }
 
    
     
-
     // LOG OUT FUNCTION
     function handleOnClick() {
         localStorage.removeItem("todoapp")
@@ -140,14 +117,15 @@ export default function MyPage() {
 
 
     
+    
   return (
     <div>
         <h1>To do...</h1>
-            {/* {myData && (
+            {myData && (
                 <>
-                    <h2>Hello {myData.user.username}! This is your to do list.</h2>
+                    <h2>{myData.user.username}´s Bucket list!</h2>
                 </>
-            )} */}
+            )}
 
                 {todoList && todoList.map((items) => {
                     if (items.isDone === false) {
@@ -158,8 +136,10 @@ export default function MyPage() {
                             <button onClick={(e) => handleOnDoneClick(items._id)}>Done</button>
                         </ul>
                         </>
-                    )}
-                })
+                    )} else {
+                        return null
+                    }
+                }) 
                 }
             
 
@@ -187,7 +167,9 @@ export default function MyPage() {
                             <button onClick={(e) => handleOnDoneClick(items._id)}>Undone</button>
                         </ul>
                         </>
-                    )}
+                    )} else {
+                        return null
+                    }
                 })
                 }
 
