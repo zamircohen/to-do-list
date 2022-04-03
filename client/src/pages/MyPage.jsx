@@ -11,13 +11,12 @@ export default function MyPage() {
     const navigate = useNavigate()
 
     
-            
     useEffect(() => {
         fetchData()
         fetchList()
-      }, []);
+    }, []);
 
-
+   
 
     function apifetch(method, path, body) {
         const url = `http://localhost:3001${path}`
@@ -53,6 +52,21 @@ export default function MyPage() {
          };
 
 
+
+         function fetchList() {
+            const url = 'http://localhost:3001/mytodos'
+            const token = localStorage.getItem('todoapp')
+            const headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            };
+            fetch(url, {
+                headers: headers,
+            })
+                .then((res) => res.json())
+                .then((data) => setTodoList(data.entries)
+                );
+        };
  
     
 
@@ -74,28 +88,11 @@ export default function MyPage() {
         // })
         apifetch("POST", "/todo", payload)
         .then(res => res.json())
-        .then(data => console.log(data))
+        .then(data => fetchList(data)) //console.log(data))
+        // fetchList()
+        setTodo("")
         navigate("/mypage")    
-        fetchList()
     }
-
-
-
-    function fetchList() {
-        const url = 'http://localhost:3001/mytodos'
-        const token = localStorage.getItem('todoapp')
-        const headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        };
-        fetch(url, {
-            headers: headers,
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setTodoList(data.entries)
-            });
-    };
 
 
 
@@ -103,29 +100,34 @@ export default function MyPage() {
         const payload = {todo_id}
         apifetch("POST", "/checkbox", payload)
         .then(res => res.json())
-        .then(data => console.log())
-        fetchList()
+        .then(data => fetchList(data)) // console.log(data))
+        // fetchList()
     }
 
-   
+
+
+  
     
     // LOG OUT FUNCTION
     function handleOnClick() {
         localStorage.removeItem("todoapp")
+        setMyData("")
+        // sessionStorage.removeItem("todoapp")
         navigate("/")
     };
 
 
-    
+ 
     
   return (
     <div>
-        <h1>To do...</h1>
             {myData && (
                 <>
                     <h2>{myData.user.username}´s Bucket list!</h2>
                 </>
             )}
+
+            <h1>To do...</h1>
 
                 {todoList && todoList.map((items) => {
                     if (items.isDone === false) {

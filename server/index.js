@@ -38,19 +38,6 @@ const requireLogin = (req, res, next) => {
 }
 
 
-// const router = express.Router()
-
-// router.get("/api")
-// router.get("/secret")
-
-// app.use("/auth", requireLogin, router)
-
-
-
-// app.get("/api", requireLogin, (req, res) => {
-//     res.json({ message: "Your TO-DO list" });
-//   });
-
   
 
 // GET USER INFORMATION TO SHOW IN FRONTEND
@@ -60,16 +47,6 @@ app.get("/users", requireLogin, (req, res) => {
   res.json({ user })
 })
 
-
-
-
-// GET LIST OF TO DO POSTS
-// app.get("/mytodos", requireLogin, (req, res) => {
-//   console.log("Program jumps into server mytodos function")
-//   const newEntry = Todo.findOne()
-//   res.json({ newEntry });
-//   // console.log(entries)
-// });
 
 
 
@@ -87,21 +64,6 @@ app.get("/mytodos", requireLogin, async (req, res) => {
 
 
 
-app.get("/mydones", requireLogin, async (req, res) => {
-  const mysort = { date: -1 }
-  const user = req.user
-  const entries = await Todo
-      .find({ user: user.userId })
-      .sort(mysort)
-      .populate("user")
-      .exec();
-  res.json({ entries });
-});
-
-
-
-
-
 
 // LOGIN 
 app.post("/login", async (req, res) => {
@@ -114,7 +76,8 @@ app.post("/login", async (req, res) => {
         JWT_SECRET,
         {expiresIn: "1h", subject: userId}
       )
-      res.json({token})
+      // await User.updateOne({ token: token }) // Ta eventuellt bort
+      res.json({ token })
       
     } else {
       res.sendStatus(401)
@@ -147,39 +110,15 @@ app.post("/todo", requireLogin, async (req, res) => {
   const user = req.user
   const newEntry = new Todo({ todo, user: user.userId })
   await newEntry.save()
-  console.log(`This is the user ${user.userId}`)
-  // res.json({user})
-  // console.log(`This is from the server: ${todo}`)
+  res.json({ newEntry })
 })
 
 
 app.post("/checkbox", requireLogin, async (req, res) => {
   const { todo_id } = req.body
-  // const todoitem = await Todo.find({_id: todo_id})
-  // const filter = { _id: `${todoitem}`}
-  // const user = req.user
-
-  // console.log(`todo_id is ${todo_id.todo}`)
-  // console.log(`filter is ${filter}`)
-  // console.log(`isDone ${isDone}`)
-  // console.log(`todoitem is ${todoitem}`)
-  // console.log(`isDone is ${todoitem}`)
-  // console.log(`user is ${user}`)
-  // console.log(`user.userId is ${user.userId}`)
-  // console.log(isDone)
-  // console.log(!isDone)
-    
-  // if (isDone === false) {
-  //   console.log("got to if state")
-    // await Todo.findOneAndUpdate(filter, {user: user.userId, todoitem: todo_id }, {isDone: true})
-    await Todo.updateOne( {_id: todo_id}, [ { "$set": { "isDone": { "$eq": [false, "$isDone"] } } } ] )
-  // } 
-  // else {
-  //   await Todo.updateOne({_id: todo_id, user: user.userId}, {isDone: false})
-  // }
+  await Todo.updateOne( {_id: todo_id}, [ { "$set": { "isDone": { "$eq": [false, "$isDone"] } } } ] )
   res.json( {todo_id} )
 })
-
 
 
 
