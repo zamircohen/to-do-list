@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken")
 const { User } = require("./models/user")
 const { Todo } = require("./models/todo")
 const bodyParser = require("body-parser")
+const multer = require("multer")
 const cors = require("cors");
 const res = require("express/lib/response");
 
@@ -38,6 +39,20 @@ const requireLogin = (req, res, next) => {
 }
 
 
+
+// UPLOAD FILE FUNCTION 
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname))
+  }
+})
+
+const upload = multer({ storage: storage });
+
+
   
 
 // GET USER INFORMATION TO SHOW IN FRONTEND
@@ -64,6 +79,15 @@ app.get("/mytodos", requireLogin, async (req, res) => {
 
 
 
+// GET SPECIFIC TO DO ITEM
+app.get("/todo/:todoId", requireLogin, async (req, res) => {
+  const todoId = req.params.todoId
+  Todo.findOne({ _id: todoId })
+  res.json({ todoId });
+});
+
+
+//************************************************************
 
 // LOGIN 
 app.post("/login", async (req, res) => {
@@ -119,6 +143,7 @@ app.post("/checkbox", requireLogin, async (req, res) => {
   await Todo.updateOne( {_id: todo_id}, [ { "$set": { "isDone": { "$eq": [false, "$isDone"] } } } ] )
   res.json( {todo_id} )
 })
+
 
 
 

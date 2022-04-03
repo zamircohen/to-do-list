@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
+import {Link} from "react-router-dom"
 
 
 export default function MyPage() {
@@ -107,7 +108,6 @@ export default function MyPage() {
 
 
   
-    
     // LOG OUT FUNCTION
     function handleOnClick() {
         localStorage.removeItem("todoapp")
@@ -115,6 +115,7 @@ export default function MyPage() {
         // sessionStorage.removeItem("todoapp")
         navigate("/")
     };
+
 
 
  
@@ -134,7 +135,7 @@ export default function MyPage() {
                     return (
                         <>
                         <ul>
-                            <li>{items.todo} - ({items.date})</li>
+                            <li> <Link to={`/todo/${items._id}`}> {items.todo} - ({items.date}) </Link> </li>
                             <button onClick={(e) => handleOnDoneClick(items._id)}>Done</button>
                         </ul>
                         </>
@@ -165,7 +166,7 @@ export default function MyPage() {
                     return (
                         <>
                         <ul>
-                            <li>{items.todo} - ({items.date})</li>
+                            <li><Link to={`/todo/${items._id}`}> {items.todo} - ({items.date}) </Link></li>
                             <button onClick={(e) => handleOnDoneClick(items._id)}>Undone</button>
                         </ul>
                         </>
@@ -174,8 +175,6 @@ export default function MyPage() {
                     }
                 })
                 }
-
-
     </div>
   )
 }

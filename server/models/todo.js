@@ -5,6 +5,8 @@ const todoSchema = new Schema({
     todo: {type: String},
     user: {type: Schema.Types.ObjectId, ref: "User"},
     date: {type: Date, default: Date.now},
+    detail: {type: String},
+    files: {type: String},
     isDone: {type: Boolean, default: false}
 })
 

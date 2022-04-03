@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import MyPage from "./pages/MyPage";
+import TodoPage from "./pages/TodoPage";
 
 
 function App() {
-  const [data, setData] = useState(null);
+  // const [data, setData] = useState(null);
 
   // useEffect(() => {
   //   fetch("/api")
@@ -25,6 +26,7 @@ function App() {
        <Route path="/" element={<LoginPage />} />
        <Route path="/signup" element={<SignupPage />} />
        <Route path="/mypage" element={<MyPage />} />
+       <Route path="/todo/:id" element={<TodoPage />} />
     </Routes>
     </div>
 
