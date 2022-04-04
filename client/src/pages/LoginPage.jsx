@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
+import Container from '../components/Container'
 
 export default function StartPage() {
 
@@ -31,6 +32,7 @@ export default function StartPage() {
 
     return (
         <div>
+            <Container>
            <h1>Log in</h1>
 
            <form onSubmit={handleOnSubmit}>
@@ -50,6 +52,8 @@ export default function StartPage() {
            </form>
            <br />
             No account? Create one <a href="/signup">here</a>   
+
+            </Container>
 
         </div>
     )

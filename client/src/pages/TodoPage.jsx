@@ -16,7 +16,7 @@ export default function TodoPage() {
 
     useEffect(() => {
         fetchTodo()
-    }, []);
+    });
 
 
 
@@ -66,13 +66,16 @@ export default function TodoPage() {
         {todoData && (
             <>
         <h1>Bucket List item:</h1> 
-        <h2>{todoData.todo}</h2>
+        <h2>Title: {todoData.todo}</h2>
+
+        <p><i>Description: {todoData.description}</i></p>
             </>
         )} 
-
+        <br />
+        
 
         <form onSubmit={handleOnSubmit}>
-                Title <br /><input 
+                Edit title <br /><input 
                     type="text"
                     placeholder={todoData.todo}
                     name={todoData.todo}
@@ -80,7 +83,7 @@ export default function TodoPage() {
                 />
                 <br />
                 <br />
-                Description
+                Edit description
                 <br />
                 <textarea
                     type="text"
