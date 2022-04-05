@@ -7,6 +7,7 @@ const bodyParser = require("body-parser")
 const multer = require("multer")
 const cors = require("cors");
 const res = require("express/lib/response");
+const path = require("path");
 
 
 // const PORT = process.env.PORT || 3001;
@@ -41,17 +42,18 @@ const requireLogin = (req, res, next) => {
 
 
 // UPLOAD FILE FUNCTION 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/uploads/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname))
-  }
-})
+// var storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'public/uploads/')
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, Date.now() + path.extname(file.originalname))
+//   }
+// })
 
-const upload = multer({ storage: storage });
-
+// const upload = multer({ storage: storage });
+const upload = multer({ dest: "public/uploads" });
+app.use(upload.single("uploaded-file"));
 
   
 
@@ -166,6 +168,11 @@ app.post("/todo/:todoId", requireLogin, async (req, res) => {
 
 
 
+app.post("/todo/upload/:todoId", requireLogin, (req, res) => {
+      console.log(req.file);
+      res.send("Files uploaded successfully!");
+  }
+);
 
 
 

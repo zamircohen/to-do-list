@@ -37,7 +37,7 @@ export default function TodoPage() {
 
 
 
-
+    // FORM SUBMIT
     function handleOnSubmit(e){
         e.preventDefault()
         const payload = {todo, description, file}
@@ -55,6 +55,29 @@ export default function TodoPage() {
         .then(data => console.log(data))
         navigate("/mypage")    
     }
+
+
+    // FILE SUBMIT
+
+    function handleFileSubmit(e){
+        e.preventDefault()
+        const payload = {file}
+        const url = `http://localhost:3001/todo/upload/${id}`
+        // const token = localStorage.getItem('todoapp')
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "multipart/form-data",
+                // Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => console.log(data))
+        navigate("/mypage")    
+    }
+
+
 
 
 
@@ -95,7 +118,11 @@ export default function TodoPage() {
                 </textarea> 
                 <br />
                 <br />
-                Upload a file
+                <button type="submit">Submit</button>
+           </form>
+            <br />
+            <form onSubmit={handleFileSubmit}>
+            Upload a file
                 <br />
                 <input 
                 type="file" 
@@ -105,7 +132,8 @@ export default function TodoPage() {
                 <br />
                 <br />
                 <button type="submit">Submit</button>
-           </form>
+            </form>
+
            <br />
 
     </div>
