@@ -170,6 +170,7 @@ app.post("/todo/:todoId", requireLogin, async (req, res) => {
 
 app.post("/todo/upload/:todoId", requireLogin, (req, res) => {
       console.log(req.file);
+      upload.array("files")
       res.send("Files uploaded successfully!");
   }
 );
