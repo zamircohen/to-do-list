@@ -40,17 +40,6 @@ const requireLogin = (req, res, next) => {
 }
 
 
-
-// UPLOAD FILE FUNCTION 
-// var storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'public/uploads/')
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, Date.now() + path.extname(file.originalname))
-//   }
-// })
-
 // const upload = multer({ storage: storage });
 const upload = multer({ dest: "public/uploads" });
 app.use(upload.single("uploaded-file"));

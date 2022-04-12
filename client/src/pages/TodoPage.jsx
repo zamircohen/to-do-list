@@ -9,6 +9,7 @@ export default function TodoPage() {
     const [todo, setTodo] = useState("")
     const [description, setDescription] = useState("")
     const [file, setFile] = useState("")
+    const [label, setLabel] = useState("")
     
     const navigate = useNavigate()
 
@@ -135,6 +136,20 @@ export default function TodoPage() {
             </form>
 
            <br />
+
+
+           <form onSubmit={handleFileSubmit}>
+            Create Label
+                <br />
+                Label: <input 
+                type="text" 
+                name={label}
+                onChange={e => setLabel(e.target.value)}
+                />
+                <br />
+                <br />
+                <button type="submit">Submit</button>
+            </form>
 
     </div>
   )
