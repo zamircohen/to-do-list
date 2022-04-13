@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 const { User } = require("./models/user")
 const { Todo } = require("./models/todo")
+const { Label } = require("./models/label")
 const bodyParser = require("body-parser")
 const multer = require("multer")
 const cors = require("cors");
@@ -126,6 +127,15 @@ app.post("/todo", requireLogin, async (req, res) => {
   const { todo } = req.body
   const user = req.user
   const newEntry = new Todo({ todo, user: user.userId })
+  await newEntry.save()
+  res.json({ newEntry })
+})
+
+
+app.post("/label", requireLogin, async (req, res) => {
+  const { label } = req.body
+  const todo = req.todo
+  const newEntry = new Label({ todo, user: user.userId })
   await newEntry.save()
   res.json({ newEntry })
 })
