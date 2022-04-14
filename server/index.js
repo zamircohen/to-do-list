@@ -42,8 +42,12 @@ const requireLogin = (req, res, next) => {
 
 
 // const upload = multer({ storage: storage });
-const upload = multer({ dest: "public/uploads" });
+const upload = multer({ dest: "uploads" });
 app.use(upload.single("uploaded-file"));
+
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(__dirname, "upload.html"))
+});
 
   
 
@@ -169,12 +173,21 @@ app.post("/todo/:todoId", requireLogin, async (req, res) => {
 
 
 app.post("/todo/upload/:todoId", requireLogin, (req, res) => {
-      console.log(req.file);
+      const todoId = req.params.todoId
+      const filter = {"_id": todoId}
+
+      const { file } = req.body;
+      console.log(file) 
+
+      Todo.findOneAndUpdate(filter, {$set: {file: file }}, {new: true}, (err, doc) => {
+      if (err) {
+          console.log("Something wrong when updating data!");
+      }
       upload.array("file")
       res.send("Files uploaded successfully!");
-  }
-);
-
+      // res.redirect("/mytodos")
+})
+})
 
 
 
