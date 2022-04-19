@@ -61,7 +61,6 @@ app.get("/users", requireLogin, (req, res) => {
 
 
 
-
 // GET LIST OF TO DO POSTS
 app.get("/mytodos", requireLogin, async (req, res) => {
   const mysort = { date: -1 }
