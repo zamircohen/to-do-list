@@ -43,8 +43,31 @@ const requireLogin = (req, res, next) => {
 
 
 // const upload = multer({ storage: storage });
-const upload = multer({ dest: "uploads" });
-app.use(upload.single("uploaded-file"));
+// const upload = multer({ dest: "uploads" });
+// app.use(upload.single("uploaded-file"));
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads")
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname)
+  }
+})
+
+const upload = multer({storage}).single("file")
+
+app.post("/upload", (req, res) => {
+  upload(req, res, (err) => {
+    if (err) {
+      return res.status(500).json(err)
+    }
+    return res.status(200).send(req.file)
+  })
+})
+
+
 
 app.get("/", (_req, res) => {
   res.sendFile(path.join(__dirname, "upload.html"))
