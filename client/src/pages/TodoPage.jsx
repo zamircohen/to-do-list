@@ -1,5 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios'
+import { toast } from "react-toastify"
+// import { Preview } from '../components/Preview'
 
 
 
@@ -8,8 +11,9 @@ export default function TodoPage() {
     const [todoData, setTodoData] = useState("")
     const [todo, setTodo] = useState("")
     const [description, setDescription] = useState("")
-    const [file, setFile] = useState("")
+    const [files, setFiles] = useState([])
     const [label, setLabel] = useState("")
+    const [fileData, setFileData] = useState("")
     
     const navigate = useNavigate()
 
@@ -17,7 +21,8 @@ export default function TodoPage() {
 
     useEffect(() => {
         fetchTodo()
-    });
+        // fetchFileList()
+    }, []);
 
 
 
@@ -38,10 +43,31 @@ export default function TodoPage() {
 
 
 
+
+
+     // GET FILE LISTFROM BACKEND 
+     function fetchFileList() {
+        const url = `http://localhost:3001/uploads`
+        const token = localStorage.getItem('todoapp')
+        const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            };
+        fetch(url, {
+            headers: headers,
+          })
+            .then((res) => res.json())
+            .then((data) => setFileData(data.filename));
+         };
+
+
+
+
+
     // FORM SUBMIT
     function handleOnSubmit(e){
         e.preventDefault()
-        const payload = {todo, description, file}
+        const payload = {todo, description}
         const url = `http://localhost:3001/todo/${id}`
         const token = localStorage.getItem('todoapp')
         fetch(url, {
@@ -58,25 +84,60 @@ export default function TodoPage() {
     }
 
 
-    // FILE SUBMIT
+  
 
-    function handleFileSubmit(e){
+    function handleLabelSubmit(e){
         e.preventDefault()
-        const payload = {file}
-        const url = `http://localhost:3001/todo/upload/${id}`
-        // const token = localStorage.getItem('todoapp')
+        const payload = {label}
+        const url = "http://localhost:3001/label"
+        const token = localStorage.getItem('todoapp')
         fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "multipart/form-data",
-                // Authorization: `Bearer ${token}`
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(payload)
         })
         .then(res => res.json())
-        .then(data => console.log(data))
+        // .then(data => fetchList(data)) //console.log(data))
+        // fetchList()
+        setLabel("")
         navigate("/mypage")    
     }
+
+
+
+
+    
+    function onInputChange(e){
+        console.log(e.target.files)
+        setFiles(e.target.files)
+    }
+    
+    function onFileSubmit(e){
+        e.preventDefault()
+
+        const data = new FormData()
+
+        for(let i = 0; i < files.length; i++){
+            data.append("file", files[i])
+        }
+
+        // data.append("file", files) 
+
+        axios.post("http://localhost:3001/upload", data)
+            .then((e) => {
+                console.log("Success")
+                toast.success("Upload Success")
+            })
+            .catch((e) => {
+                console.error("Error", e)
+                toast.error("Upload Error")
+            })
+            fetchFileList()
+    }
+
 
 
 
@@ -96,6 +157,15 @@ export default function TodoPage() {
             </>
         )} 
         <br />
+
+
+        {fileData && (
+            <>
+        <h2>Attachments: {fileData}</h2>
+            </>
+        )} 
+
+
         
 
         <form onSubmit={handleOnSubmit}>
@@ -122,23 +192,16 @@ export default function TodoPage() {
                 <button type="submit">Submit</button>
            </form>
             <br />
-            <form onSubmit={handleFileSubmit}>
-            Upload a file
-                <br />
-                <input 
-                type="file" 
-                name={file}
-                onChange={e => setFile(e.target.value)}
-                />
-                <br />
-                <br />
-                <button type="submit">Submit</button>
-            </form>
-
+            <a href="/mypage">Back</a>
+            <br />
+            <br />
+            
+            
+      
            <br />
 
 
-           <form onSubmit={handleFileSubmit}>
+           <form onSubmit={handleLabelSubmit}>
             Create Label
                 <br />
                 Label: <input 
@@ -150,6 +213,22 @@ export default function TodoPage() {
                 <br />
                 <button type="submit">Submit</button>
             </form>
+
+            <br />
+            <br />
+
+
+            <form method="post" action="/" id="" onSubmit={onFileSubmit}>
+                <label>Upload your file</label>
+                <input 
+                    type="file"
+                    onChange={onInputChange} 
+                    multiple 
+                />
+                <button type="submit">Submit</button>
+            </form> 
+
+            
 
     </div>
   )
