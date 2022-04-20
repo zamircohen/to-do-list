@@ -22,6 +22,9 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
 
+// const POSTtagsRouter = require("./controllers/POSTtags").router;
+// app.use("/tags", POSTtagsRouter);
+
 
 app.use((req, _res, next) => {
   const authHeader = req.header("Authorization")
@@ -95,6 +98,20 @@ app.get("/mytodos", requireLogin, async (req, res) => {
       .exec();
   res.json({ entries });
 });
+
+
+
+app.get("/search", requireLogin, async (req, res) => {
+  const mysort = { date: -1 }
+  const user = req.user
+  const entries = await Todo
+      .find({ user: user.userId })
+      .sort(mysort)
+      .populate("user")
+      .exec();
+  res.json({ entries });
+});
+
 
 
 
