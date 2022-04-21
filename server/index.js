@@ -102,6 +102,9 @@ app.get("/mytodos", requireLogin, async (req, res) => {
 
 
 app.get("/search", requireLogin, async (req, res) => {
+
+  console.log(req.params.sortType)
+
   const mysort = { date: -1 }
   const user = req.user
   const entries = await Todo
