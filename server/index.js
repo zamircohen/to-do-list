@@ -128,8 +128,6 @@ app.get("/todo/:todoId", requireLogin, async (req, res) => {
 
 
 
-//************************************************************
-
 // LOGIN 
 app.post("/login", async (req, res) => {
     const {username, password} = req.body
@@ -228,9 +226,20 @@ app.post("/todo/upload/:todoId", requireLogin, (req, res) => {
       }
       upload.array("file")
       res.send("Files uploaded successfully!");
-      // res.redirect("/mytodos")
 })
 })
+
+
+
+
+app.post("/tags", requireLogin, async (req, res) => {
+      const { tag } = req.body;
+      const todoTags = await Todo
+          .find({ user: req.user.userId, tagList: tag })
+          .populate("user")
+          .exec();
+      res.json({ todoTags });
+  })
 
 
 

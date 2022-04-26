@@ -8,7 +8,7 @@ const todoSchema = new Schema({
     description: {type: String, default: ""},
     file: {type: String, default: ""},
     isDone: {type: Boolean, default: false},
-    tag: [{type: String}]
+    tagList: [{type: String}]
 })
 
 const Todo = mongoose.model("Todo", todoSchema)
