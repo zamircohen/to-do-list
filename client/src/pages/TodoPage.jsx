@@ -13,8 +13,12 @@ export default function TodoPage() {
     const [description, setDescription] = useState("")
     const [files, setFiles] = useState([])
     const [label, setLabel] = useState("")
-    const [fileData, setFileData] = useState("")
+    // const [fileData, setFileData] = useState("")
     
+    // const onSuccess = (savedFiles) => {
+    //     setFiles(savedFiles)
+    // };
+
     const navigate = useNavigate()
 
     let { id }  = useParams()
@@ -40,26 +44,6 @@ export default function TodoPage() {
             .then((res) => res.json())
             .then((data) => setTodoData(data.entry));
          };
-
-
-
-
-
-     // GET FILE LISTFROM BACKEND 
-     function fetchFileList() {
-        const url = `http://localhost:3001/uploads`
-        const token = localStorage.getItem('todoapp')
-        const headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            };
-        fetch(url, {
-            headers: headers,
-          })
-            .then((res) => res.json())
-            .then((data) => setFileData(data.filename));
-         };
-
 
 
 
@@ -123,9 +107,6 @@ export default function TodoPage() {
         for(let i = 0; i < files.length; i++){
             data.append("file", files[i])
         }
-
-        // data.append("file", files) 
-
         axios.post("http://localhost:3001/upload", data)
             .then((e) => {
                 console.log("Success")
@@ -135,8 +116,18 @@ export default function TodoPage() {
                 console.error("Error", e)
                 toast.error("Upload Error")
             })
-            fetchFileList()
+            // fetchFileList()
+            // preview()
+            // onSuccess={onSuccess}
     }
+
+
+    // function preview({files}){
+    //     if (!files.length) {
+    //         return null
+    //     }
+    //     return files.map((file) => <img style={{maxWidth: '200px'}} src={`//localhost:8000/${file.filename}`} alt={file.originalname}/>);
+    // };
 
 
 
@@ -159,11 +150,11 @@ export default function TodoPage() {
         <br />
 
 
-        {fileData && (
+        {/* {fileData && (
             <>
         <h2>Attachments: {fileData}</h2>
             </>
-        )} 
+        )}  */}
 
 
         
@@ -228,7 +219,7 @@ export default function TodoPage() {
                 <button type="submit">Submit</button>
             </form> 
 
-            
+            {/* <Preview files={files}/> */}
 
     </div>
   )

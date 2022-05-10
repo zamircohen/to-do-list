@@ -128,6 +128,8 @@ export default function MyPage() {
                 </>
             )}
 
+            <Link to={`/search`}> {"Search & sort"} </Link>
+
             <h1>To do...</h1>
 
                 {todoList && todoList.map((items) => {

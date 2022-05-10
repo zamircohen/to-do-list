@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import MyPage from "./pages/MyPage";
 import TodoPage from "./pages/TodoPage";
+import SearchPage from "./pages/SearchPage";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
        <Route path="/signup" element={<SignupPage />} />
        <Route path="/mypage" element={<MyPage />} />
        <Route path="/todo/:id" element={<TodoPage />} />
+       <Route path="/search" element={<SearchPage />} />
     </Routes>
     </div>
 

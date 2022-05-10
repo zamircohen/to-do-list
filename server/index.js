@@ -22,8 +22,7 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
 
-// const POSTtagsRouter = require("./controllers/POSTtags").router;
-// app.use("/tags", POSTtagsRouter);
+
 
 
 app.use((req, _res, next) => {
@@ -44,10 +43,6 @@ const requireLogin = (req, res, next) => {
   }
 }
 
-
-// const upload = multer({ storage: storage });
-// const upload = multer({ dest: "uploads" });
-// app.use(upload.single("uploaded-file"));
 
 
 const storage = multer.diskStorage({
