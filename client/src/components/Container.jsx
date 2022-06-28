@@ -10,6 +10,7 @@ const StyledContainer = styled.div`
     padding: 10px;
     background-color: lightgray;
     text-align: center;
+    font: bold 20px/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
     // div {
     //     box-shadow: 10px 10px;
